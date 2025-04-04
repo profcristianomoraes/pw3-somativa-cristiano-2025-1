@@ -22,13 +22,14 @@ const CreateBook = ()=>{
 
     //Captura de dados do elemento de select
     function handlerChangeCategory(event) {
-        setBook({...book, cod_categoria : event.target.options[event.target.selectedIndex].text})
+        setBook({...book, cod_categoria : event.target.options[event.target.selectedIndex].value})
     }
 
     //Envio dos dados para a API
     function submit(event) {
         event.preventDefault();
         console.log(book);
+        insertBook(book);
     }
 
     /* RECUPERA OS DADOS DE CATEGORIA DA APIREST: */
@@ -44,10 +45,33 @@ const CreateBook = ()=>{
             resp.json()
         ).then((categorias)=>{
             console.log('TESTE: ' + categorias.data);
+            setCategories(categorias.data);
         }).catch((error)=>{
             console.log('ERRO: ' + error);
         })
     }, []);
+
+    /* INSERÇÃO DE LIVRO */
+    function insertBook(book) {
+        
+        fetch('http://127.0.0.1:5000/inserirLivro', {
+            method:'POST',
+            mode:'cors',
+            headers:{
+                'Content-Type':'application/json',
+                'Access-Control-Allow-Origin':'*',
+                'Access-Control-Allow-Headers':'*'
+            },
+            body:JSON.stringify(book)
+        }).then((resp)=>
+            resp.json()
+        ).then((respJSON)=>{
+            console.log('RESPOSTA: ' + respJSON);
+        }).catch((error)=>{
+            console.log('ERRO: ' + error);
+        })
+
+    }
 
     return(
 
@@ -89,6 +113,7 @@ const CreateBook = ()=>{
                     id='cod_categoria'
                     text='Categoria do livro'
                     handlerChange={handlerChangeCategory}
+                    options={categories}
                 />
 
                 <Button
