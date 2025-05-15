@@ -42,6 +42,7 @@ const ListBook = ()=>{
                     books.map((book)=>(
                         
                         <BookCard 
+                            cod_livro={book.cod_livro}
                             nome_livro = {book.nome_livro}
                             autor_livro = {book.autor_livro}
                             imagem = {cavernas}
